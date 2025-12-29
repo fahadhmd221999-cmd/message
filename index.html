@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For My Forever 💍</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --pink: #ff85a2;
+  --dark-pink: #ff4d6d;
+  --bg: #fff0f3;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: 'Quicksand', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+.container {
+  background: white;
+  border-radius: 28px;
+  padding: 32px;
+  width: min(92%, 500px);
+  box-shadow: 0 20px 40px rgba(255, 133, 162, 0.25);
+  border: 3px dashed #ffc2d1;
+  text-align: center;
+  animation: pop 0.6s ease;
+}
+
+.hidden { display: none; }
+
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+h2 {
+  font-family: 'Dancing Script', cursive;
+  color: var(--dark-pink);
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+}
+
+p { color: #555; }
+
+.mascot {
+  font-size: 3rem;
+  animation: bounce 2s infinite;
+  cursor: pointer;
+}
+
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.btn {
+  margin: 10px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: var(--pink);
+  box-shadow: 0 8px 20px rgba(255,133,162,.4);
+  transition: transform .2s, background .2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  background: var(--dark-pink);
+}
+
+.btn.secondary {
+  background: #cbd5e0;
+  color: #333;
+}
+
+.nav { margin-top: 20px; }
+
+.letter {
+  text-align: left;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  white-space: pre-wrap;
+  min-height: 200px;
+}
+
+.signature {
+  margin-top: 28px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.6rem;
+  color: var(--dark-pink);
+  text-align: right;
+}
+
+.secret {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 16px;
+  background: #fff0f3;
+  color: var(--dark-pink);
+  font-size: 0.95rem;
+  display: none;
+}
+
+/* Floating background */
+.floating {
+  position: fixed;
+  bottom: -40px;
+  font-size: 22px;
+  animation: float 7s linear forwards;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@keyframes float {
+  to {
+    transform: translateY(-110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SCREEN 1 -->
+<div id="screen1" class="container">
+  <div class="mascot" id="mascot">🐰</div>
+  <h2>Wait… I made something for you</h2>
+  <p>It’s small, but it has a lot of love.</p>
+  <button class="btn" onclick="go('screen2')">Okay 💕</button>
+</div>
+
+<!-- SCREEN 2 -->
+<div id="screen2" class="container hidden">
+  <div class="mascot">💌</div>
+  <h2>One question</h2>
+  <p>Do you want to read a letter written just for you?</p>
+  <button class="btn" onclick="openLetter()">Yes 😍</button>
+  <button id="noBtn" class="btn secondary">No 😤</button>
+  <div class="nav">
+    <button class="btn secondary" onclick="go('screen1')">⬅ Back</button>
+  </div>
+</div>
+
+<!-- LETTER -->
+<div id="letterScreen" class="container hidden">
+  <h2>Dear Ilma,</h2>
+  <div id="letterText" class="letter"></div>
+
+  <div class="signature">
+    Yours, always ❤️<br>
+    Fahad
+  </div>
+
+  <div id="secret" class="secret">
+    🌸 Secret unlocked: No matter where life takes us, you will always be my safest place.
+  </div>
+
+  <div class="nav">
+    <button class="btn secondary" onclick="go('screen2')">⬅ Back</button>
+    <button class="btn" onclick="go('screen1')">🏠 Home</button>
+  </div>
+</div>
+
+<script>
+const screens = ['screen1','screen2','letterScreen'];
+function go(id) {
+  screens.forEach(s => document.getElementById(s).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+// Typing animation
+const letterContent = `
+I just wanted to remind you how incredibly lucky I am to love you.
+
+Life feels warmer, calmer, and more meaningful with you by my side.
+I admire your strength, your kindness, and the quiet way you make everything better — including me.
+
+I can’t wait to spend forever choosing you,
+every single day.
+`;
+
+let index = 0;
+function typeLetter() {
+  const target = document.getElementById('letterText');
+  if (index < letterContent.length) {
+    target.innerHTML += letterContent.charAt(index);
+    index++;
+    setTimeout(typeLetter, 35);
+  }
+}
+
+function openLetter() {
+  go('letterScreen');
+  document.getElementById('letterText').innerHTML = '';
+  index = 0;
+  typeLetter();
+}
+
+// playful no-button
+const noBtn = document.getElementById('noBtn');
+let dodges = 0;
+noBtn.addEventListener('mouseenter', () => {
+  dodges++;
+  if (dodges > 3) return;
+  noBtn.style.transform = `translate(${Math.random()*50}px, ${Math.random()*40}px)`;
+});
+
+// Easter egg
+let clicks = 0;
+document.getElementById('mascot').addEventListener('click', () => {
+  clicks++;
+  if (clicks === 5) {
+    document.getElementById('secret').style.display = 'block';
+  }
+});
+
+// floating hearts
+const emojis = ['❤️','💖','✨','🌸','🧸'];
+setInterval(() => {
+  const e = document.createElement('div');
+  e.className = 'floating';
+  e.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+  e.style.left = Math.random()*100 + 'vw';
+  document.body.appendChild(e);
+  setTimeout(()=>e.remove(),7000);
+}, 600);
+</script>
+
+</body>
+</html>
